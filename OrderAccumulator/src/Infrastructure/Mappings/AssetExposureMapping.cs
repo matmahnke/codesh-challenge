@@ -1,0 +1,23 @@
+﻿using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+namespace Infrastructure.Mappings
+{
+    public sealed class AssetExposureMapping : IEntityTypeConfiguration<AssetExposure>
+    {
+        public void Configure(EntityTypeBuilder<AssetExposure> builder)
+        {
+            builder.ToTable("AssetExposures");
+
+            builder.HasKey(x => x.Asset);
+
+            builder.Property(x => x.Asset)
+                .HasMaxLength(10)
+                .IsRequired();
+
+            builder.Property(x => x.Exposure)
+                .IsRequired();
+        }
+    }
+}
