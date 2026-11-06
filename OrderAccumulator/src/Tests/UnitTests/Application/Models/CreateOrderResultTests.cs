@@ -1,7 +1,7 @@
 using Application.Models;
 using FluentAssertions;
 
-namespace Tests.Application.Models
+namespace Tests.UnitTests.Application.Models
 {
     public class CreateOrderResultTests
     {

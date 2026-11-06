@@ -65,7 +65,7 @@ namespace Tests.Api.Controller
         [Fact]
         public async Task ValidRequest_RejectedByLimit_ReturnsOkWithErrorAndCurrentExposure()
         {
-            // Arrange
+            // Arange
             var exposure = 500m;
             var reason = "Limite de exposição excedido.";
             _transaction.ProcessAsync(Arg.Any<CreateOrderCommand>(), Arg.Any<CancellationToken>())
@@ -100,7 +100,7 @@ namespace Tests.Api.Controller
         }
 
         [Fact]
-        public async Task ValidRequest_ForwardsCancellationTokenToValidatorAndTransaction()
+        public async Task ValidRequest_ForwardsCancelationTokenToValidatorAndTransaction()
         {
             // Arrange
             using var cts = new CancellationTokenSource();
@@ -108,6 +108,7 @@ namespace Tests.Api.Controller
 
             // Act
             await _sut.Create(request, cts.Token);
+
 
             // Assert
             await _validator.Received(1).ValidateAsync(request, cts.Token);
@@ -118,7 +119,7 @@ namespace Tests.Api.Controller
         public async Task InvalidRequest_ReturnsBadRequest_WithoutCallingTransaction()
         {
             // Arrange
-            var error = "Ativo deve ser PETR4, VALE3, VIIA4.";
+            var error =  "Ativo deve ser PETR4, VALE3, VIIA4.";
             GivenValidationErrors(error);
 
             // Act
@@ -143,7 +144,7 @@ namespace Tests.Api.Controller
             GivenValidationErrors(assetError, sideError);
 
             // Act
-            var actionResult = await _sut.Create(new CreateOrderRequest(), CancellationToken.None);
+            var actionResult = await _sut.Create(new CreateOrderRequest(),CancellationToken.None);
 
             // Assert
             var badRequest = actionResult.Result.Should().BeOfType<BadRequestObjectResult>().Subject;

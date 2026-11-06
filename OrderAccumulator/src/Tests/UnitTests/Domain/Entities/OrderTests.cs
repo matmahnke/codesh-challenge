@@ -4,7 +4,7 @@ using Domain.Exceptions;
 using FluentAssertions;
 using System.Globalization;
 
-namespace Tests.Domain.Entities
+namespace Tests.UnitTests.Domain.Entities
 {
     public class OrderTests
     {

@@ -4,7 +4,7 @@ using FluentAssertions;
 using FluentValidation.TestHelper;
 using System.Globalization;
 
-namespace Tests.Api.Validators
+namespace Tests.UnitTests.Api.Validators
 {
     public class CreateOrderRequestValidatorTests
     {

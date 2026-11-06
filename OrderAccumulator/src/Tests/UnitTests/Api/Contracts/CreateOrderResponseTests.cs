@@ -2,7 +2,7 @@ using Api.Contracts;
 using FluentAssertions;
 using System.Text.Json;
 
-namespace Tests.Api.Contracts
+namespace Tests.UnitTests.Api.Contracts
 {
     public class CreateOrderResponseTests
     {

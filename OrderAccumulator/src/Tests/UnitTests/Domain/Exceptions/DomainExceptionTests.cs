@@ -1,7 +1,7 @@
 using Domain.Exceptions;
 using FluentAssertions;
 
-namespace Tests.Domain.Exceptions
+namespace Tests.UnitTests.Domain.Exceptions
 {
     public class DomainExceptionTests
     {

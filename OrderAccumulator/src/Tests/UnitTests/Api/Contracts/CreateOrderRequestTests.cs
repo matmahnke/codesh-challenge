@@ -31,9 +31,9 @@ namespace Tests.Api.Contracts
         }
 
         [Fact]
-        public void Deserialize_MissingFields_LeavesThemNull()
+        public void Deserialize_MissingFeilds_LeavesThemNull()
         {
-            // Arrange
+            // Arrange 
             var json = "{}";
 
             // Act

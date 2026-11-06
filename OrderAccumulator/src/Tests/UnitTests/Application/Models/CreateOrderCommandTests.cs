@@ -2,7 +2,7 @@ using Application.Models;
 using Domain.Enums;
 using FluentAssertions;
 
-namespace Tests.Application.Models
+namespace Tests.UnitTests.Application.Models
 {
     public class CreateOrderCommandTests
     {

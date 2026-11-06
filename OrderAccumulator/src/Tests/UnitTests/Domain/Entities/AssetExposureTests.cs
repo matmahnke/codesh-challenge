@@ -74,7 +74,7 @@ namespace Tests.Domain.Entities
         }
 
         [Fact]
-        public void TryApply_MultipleOrders_AccumulatesExposureAndVersion()
+        public void TryApply_MultipleOrders_AccumulatesExposureAndVerison()
         {
             // Arrange
             var exposure = new AssetExposure("PETR4");
@@ -85,8 +85,7 @@ namespace Tests.Domain.Entities
                 Order.Create("PETR4", OrderSide.Buy, 1, 0.5m)
             };
 
-            // Act
-            foreach (var order in orders)
+            foreach(var order in orders)
                 exposure.TryApply(order);
 
             // Assert
@@ -158,7 +157,7 @@ namespace Tests.Domain.Entities
 
             // Assert
             applied.Should().BeFalse();
-            exposure.ExposureCents.Should().Be(-NearLimitCents);
+           exposure.ExposureCents.Should().Be(-NearLimitCents);
             order.Status.Should().Be(OrderStatus.Rejected);
             order.RejectionReason.Should().Contain(asset).And.Contain("-1.000.000,01");
         }
@@ -171,7 +170,7 @@ namespace Tests.Domain.Entities
             var order = Order.Create("PETR4", OrderSide.Buy, 99_999, 999.99m);
 
             // Act
-            var applied = exposure.TryApply(order);
+            var applied  = exposure.TryApply(order);
 
             // Assert
             applied.Should().BeFalse();
@@ -188,7 +187,7 @@ namespace Tests.Domain.Entities
             // Act
             var applied = exposure.TryApply(order);
 
-            // Assert
+            // Asert
             applied.Should().BeTrue();
             exposure.ExposureCents.Should().Be(AssetExposure.LimitCents - 100);
         }
@@ -199,10 +198,10 @@ namespace Tests.Domain.Entities
             // Arrange
             var order = Order.Create("PETR4", OrderSide.Buy, 1, 10.01m);
             new AssetExposure("PETR4", NearLimitCents).TryApply(order);
-            var freshExposure = new AssetExposure("PETR4");
+            var freshExposre = new AssetExposure("PETR4");
 
             // Act
-            var applied = freshExposure.TryApply(order);
+            var applied = freshExposre.TryApply(order);
 
             // Assert
             applied.Should().BeTrue();

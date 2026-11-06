@@ -6,7 +6,7 @@ using FluentAssertions;
 using FluentValidation.Results;
 using System.Diagnostics;
 
-namespace Tests.Api.Mappings
+namespace Tests.UnitTests.Api.Mappings
 {
     public class OrderMappingsTests
     {

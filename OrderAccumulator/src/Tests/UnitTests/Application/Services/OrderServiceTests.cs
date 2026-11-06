@@ -44,7 +44,7 @@ namespace Tests.Application.Services
         }
 
         [Fact]
-        public async Task Sell_WithinLimit_ReturnsAcceptedWithNegativeExposure()
+        public async Task Sell_WithinLimit_ReturnsAcceptedWithNegativeExpossure()
         {
             // Arrange
             GivenExposure("VALE3");
@@ -81,8 +81,8 @@ namespace Tests.Application.Services
         {
             // Arrange
             var asset = "PETR4";
-            var nearLimit = AssetExposure.LimitCents - 1_000;
-            var exposure = GivenExposure(asset, nearLimit);
+            var nearLimt = AssetExposure.LimitCents - 1_000;
+            var exposure = GivenExposure(asset, nearLimt);
             var command = new CreateOrderCommand(asset, OrderSide.Buy, 1, 10.01m);
 
             // Act
@@ -90,9 +90,9 @@ namespace Tests.Application.Services
 
             // Assert
             result.Success.Should().BeFalse();
-            result.CurrentExposure.Should().Be(nearLimit / 100m);
+            result.CurrentExposure.Should().Be(nearLimt / 100m);
             result.ErrorMessage.Should().StartWith("Ordem rejeitada:").And.Contain(asset);
-            exposure.ExposureCents.Should().Be(nearLimit);
+            exposure.ExposureCents.Should().Be(nearLimt);
         }
 
         [Fact]
@@ -102,9 +102,8 @@ namespace Tests.Application.Services
             GivenExposure("PETR4", AssetExposure.LimitCents);
             var command = new CreateOrderCommand("PETR4", OrderSide.Buy, 1, 0.01m);
 
-            // Act
+            //Act
             await _sut.ProcessAsync(command, CancellationToken.None);
-
             // Assert
             _orders.Received(1).Add(Arg.Is<Order>(o =>
                 o.Status == OrderStatus.Rejected && o.RejectionReason != null));
@@ -114,7 +113,7 @@ namespace Tests.Application.Services
         public async Task LooksUpExposureByAsset_ForwardingCancellationToken()
         {
             // Arrange
-            var asset = "VIIA4";
+            var asset ="VIIA4";
             GivenExposure(asset);
             using var cts = new CancellationTokenSource();
             var command = new CreateOrderCommand(asset, OrderSide.Buy, 1, 1m);
@@ -129,7 +128,7 @@ namespace Tests.Application.Services
         [Fact]
         public async Task ExposureNotFound_Throws_AndDoesNotAddOrder()
         {
-            // Arrange
+            // Arange
             _exposures.GetByAssetAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
                 .Returns((AssetExposure?)null);
             var asset = "PETR4";
@@ -175,6 +174,7 @@ namespace Tests.Application.Services
             _orders.DidNotReceiveWithAnyArgs().Add(default!);
         }
 
+
         [Fact]
         public async Task SequentialOrders_AccumulateOnSameExposure()
         {
@@ -190,7 +190,7 @@ namespace Tests.Application.Services
             // Assert
             result.Should().Be(CreateOrderResult.Accepted(600m));
             exposure.Version.Should().Be(2);
-            _orders.ReceivedWithAnyArgs(2).Add(default!);
+            _orders.ReceivedWithAnyArgs(2).Add(default!); 
         }
     }
 }
