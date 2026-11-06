@@ -1,12 +1,12 @@
-using System.Globalization;
 using Api.Contracts;
 using Domain;
 using Domain.Entities;
 using FluentValidation;
+using System.Globalization;
 
 namespace Api.Validators
 {
-    public sealed class CreateOrderRequestValidator : AbstractValidator<CreateOrderRequest>
+    public sealed class CreateOrderRequestValidator : AbstractValidator<CreateOrderRequest>, IValidator<CreateOrderRequest>
     {
         private static readonly string[] AllowedSides = ["C", "V"];
         private static readonly CultureInfo PtBr = CultureInfo.GetCultureInfo("pt-BR");

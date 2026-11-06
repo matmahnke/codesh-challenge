@@ -1,8 +1,8 @@
-using System.Diagnostics;
 using Api.Contracts;
 using Application.Models;
 using Domain.Enums;
 using FluentValidation.Results;
+using System.Diagnostics;
 
 namespace Api.Mappings
 {

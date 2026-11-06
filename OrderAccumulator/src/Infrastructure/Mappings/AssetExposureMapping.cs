@@ -26,7 +26,7 @@ namespace Infrastructure.Mappings
 
             builder.Ignore(x => x.Exposure);
 
-            builder.HasData(Assets.Supported.Select(asset => new AssetExposure(asset)));
+            builder.HasData(Assets.Supported.Select(asset => new AssetExposure(asset))); // Todo: segregar em outro arquivo essa seed
         }
     }
 }

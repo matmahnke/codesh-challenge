@@ -8,7 +8,7 @@ namespace Application.Transactions
     {
         public async Task<CreateOrderResult> ProcessAsync(CreateOrderCommand command, CancellationToken ct)
         {
-            // Se qualquer etapa lançar exceção, o DisposeAsync faz o rollback.
+            // o dispose faz o rollback.
             await using var transaction = await unitOfWork.BeginTransactionAsync(ct);
 
             var result = await orderService.ProcessAsync(command, ct);

@@ -15,8 +15,6 @@ namespace Infrastructure.UnitOfWork
         {
             try
             {
-                // No SQLite, Serializable emite "BEGIN IMMEDIATE": o lock de escrita é obtido já aqui,
-                // serializando o ciclo ler -> validar limite -> gravar entre requisições concorrentes.
                 var transaction = await context.Database.BeginTransactionAsync(IsolationLevel.Serializable, ct);
                 return new Transaction(context, transaction);
             }
@@ -35,7 +33,7 @@ namespace Infrastructure.UnitOfWork
             {
                 try
                 {
-                    await context.SaveChangesAsync(ct);
+                    await context.SaveChangesAsync(ct); // Todo: ponto de falha, usar algo similar ao outbox pattern
                     await transaction.CommitAsync(ct);
                 }
                 catch (DbUpdateConcurrencyException ex)

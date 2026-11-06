@@ -1,5 +1,5 @@
-﻿using System.Globalization;
-using Domain.Exceptions;
+﻿using Domain.Exceptions;
+using System.Globalization;
 
 namespace Domain.Entities
 {
@@ -44,6 +44,6 @@ namespace Domain.Entities
         }
 
         private static string FormatCents(long cents) =>
-            (cents / 100m).ToString("N2", CultureInfo.GetCultureInfo("pt-BR"));
+            (cents / 100m).ToString("N2", CultureInfo.GetCultureInfo("pt-BR")); // TODO: Passar cultura para uma constante global
     }
 }

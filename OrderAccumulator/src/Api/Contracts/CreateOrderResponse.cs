@@ -13,7 +13,6 @@ namespace Api.Contracts
         [JsonPropertyName("msg_erro")]
         public string? MsgErro { get; } = msgErro;
 
-        /// <summary>Erro antes do processamento da ordem (validação/infra): exposição não é conhecida.</summary>
         public static CreateOrderResponse Failure(string msgErro) => new(false, 0m, msgErro);
     }
 }

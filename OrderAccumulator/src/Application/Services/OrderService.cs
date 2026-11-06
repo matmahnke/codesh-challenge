@@ -12,7 +12,6 @@ namespace Application.Services
         {
             var order = Order.Create(command.Asset, command.Side, command.Quantity, command.Price);
 
-            // Order.Create já garante que o ativo é suportado; ausência aqui indica seed faltando (erro interno).
             var exposure = await exposures.GetByAssetAsync(command.Asset, ct)
                 ?? throw new InvalidOperationException($"Exposição do ativo '{command.Asset}' não encontrada.");
 
