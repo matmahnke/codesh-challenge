@@ -11,7 +11,7 @@
             {
                 options.AddPolicy(FrontendCorsPolicy, policy =>
                 {
-                    policy.AllowAnyOrigin()
+                    policy.AllowAnyOrigin() // Todo: Add the specific frontend URL, by appsettings
                           .AllowAnyHeader()
                           .AllowAnyMethod();
                 });

@@ -1,6 +1,8 @@
 import { useState } from "react";
 import "./App.css";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 function App() {
   const [ativo, setAtivo] = useState("PETR4");
   const [lado, setLado] = useState("C");
@@ -23,7 +25,7 @@ function App() {
     setResultado(null);
 
     try {
-      const response = await fetch("https://localhost:7126/api/orders", {
+      const response = await fetch(`${API_URL}/api/orders`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -45,7 +47,7 @@ function App() {
 
   return (
     <div className="container">
-      <h1>OrderGenerator</h1>
+      <h1>Ordens</h1>
 
       <form onSubmit={enviarOrdem}>
         <label>Ativo</label>
