@@ -1,7 +1,7 @@
 @Api_HostAddress = http://localhost:5164
 
 ### Compra aceita
-POST {{Api_HostAddress}}/orders
+POST {{Api_HostAddress}}/api/orders
 Content-Type: application/json
 
 {
@@ -12,7 +12,7 @@ Content-Type: application/json
 }
 
 ### Venda aceita
-POST {{Api_HostAddress}}/orders
+POST {{Api_HostAddress}}/api/orders
 Content-Type: application/json
 
 {
@@ -23,7 +23,7 @@ Content-Type: application/json
 }
 
 ### Rejeitada por limite
-POST {{Api_HostAddress}}/orders
+POST {{Api_HostAddress}}/api/orders
 Content-Type: application/json
 
 {
@@ -34,7 +34,7 @@ Content-Type: application/json
 }
 
 ### Payload inválido
-POST {{Api_HostAddress}}/orders
+POST {{Api_HostAddress}}/api/orders
 Content-Type: application/json
 
 {
