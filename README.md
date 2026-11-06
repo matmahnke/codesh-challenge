@@ -1,26 +1,77 @@
-# Project Empty Template
+# OrderGenerator & OrderAccumulator
 
-Este é um repositório de exemplo para você começar a desenvolver a questão, leia com atenção os requisitos do enunciado da questão na plataforma e seguia as boas práticas sobre como utilizar este repositório.
+Sistema de envio de ordens de compra/venda de ativos com controle de exposição financeira por ativo, limitada a R$ 1.000.000.
 
+> This is a challenge by [Coodesh](https://coodesh.com/)
 
-## Readme do Repositório
+## Tecnologias
 
-- Deve conter o título do projeto
-- Uma descrição sobre o projeto em frase
-- Deve conter uma lista com linguagem, framework e/ou tecnologias usadas
-- Como instalar e usar o projeto (instruções)
-- Não esqueça o [.gitignore](https://www.toptal.com/developers/gitignore)
-- Se está usando github pessoal, referencie que é um challenge by coodesh:  
+- **Backend (OrderAccumulator):** C# / .NET 10, ASP.NET Core Web API, Entity Framework Core, SQLite, FluentValidation
+- **Testes:** xUnit, FluentAssertions, NSubstitute
+- **Frontend (OrderGenerator):** React 19, JavaScript (JSX), Vite, Fetch API
+- **Infra:** Docker, Docker Compose, Nginx
 
->  This is a challenge by [Coodesh](https://coodesh.com/)
+## Como rodar
 
-## Finalização e Instruções para a Apresentação
+### Com Docker Compose
 
-1. Adicione o link do repositório com a sua solução na questão na plataforma
-2. Verifique se o Readme está bom e faça o commit final em seu repositório;
-3. Envie e aguarde as instruções para seguir. Caso o teste tenha apresentação de vídeo, dentro da tela de entrega será possível gravar após adicionar o link do repositório. Sucesso e boa sorte. =)
+Pré-requisito: Docker com Docker Compose.
 
+```bash
+docker compose up --build
+```
 
-## Suporte
+Frontend: http://localhost:5174
 
-Para tirar dúvidas sobre o processo envie uma mensagem diretamente a um especialista no chat da plataforma. 
+API: http://localhost:5165
+
+Para parar: `docker compose down` (adicione `-v` para apagar o banco de dados).
+
+### Localmente
+
+Pré-requisitos: .NET 10 SDK e Node.js 22+.
+
+**Backend** (API em http://localhost:5164, as migrations são aplicadas ao iniciar):
+
+```bash
+cd OrderAccumulator
+dotnet run --project src/Api --launch-profile http
+```
+
+**Frontend** (em outro terminal):
+
+```bash
+cd OrderGenerator
+npm install
+npm run dev
+```
+
+O endereço da API usado pelo frontend é definido em `OrderGenerator/.env` (`VITE_API_URL`). Ajuste para `http://localhost:5164` se o backend estiver rodando com o perfil `http`.
+
+**Testes:**
+
+```bash
+cd OrderAccumulator
+dotnet test
+```
+
+## API
+
+`POST /api/orders`
+
+```json
+{ "ativo": "PETR4", "lado": "C", "quantidade": 584, "preco": 54.87 }
+```
+
+Resposta:
+
+```json
+{ "sucesso": true, "exposicao_atual": 32044.08, "msg_erro": null }
+```
+
+- `ativo`: `PETR4`, `VALE3` ou `VIIA4`
+- `lado`: `C` (compra) ou `V` (venda)
+- `quantidade`: inteiro entre 1 e 99.999
+- `preco`: decimal positivo, múltiplo de 0,01 e menor que 1.000
+
+Ordens que fariam a exposição do ativo ultrapassar R$ 1.000.000 (em valor absoluto) são rejeitadas e não registradas. Exemplos de requisição em `OrderAccumulator/src/Api/Api.http`.

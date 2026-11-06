@@ -18,7 +18,7 @@ services:
       context: ./OrderGenerator
       dockerfile: Dockerfile
       args:
-        VITE_API_URL: http://localhost:5164
+        VITE_API_URL: http://localhost:5165
     container_name: order-generator
     ports:
       - "5174:80"
