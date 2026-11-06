@@ -1,16 +1,9 @@
 ﻿namespace Application.Models
 {
-    public class CreateOrderResult
+    public sealed record CreateOrderResult(bool Success, decimal CurrentExposure, string? ErrorMessage)
     {
-        public CreateOrderResult(bool success, decimal currentExposure, string errorMessage)
-        {
-            Success = success;
-            CurrentExposure = currentExposure;
-            ErrorMessage = errorMessage;
-        }
+        public static CreateOrderResult Accepted(decimal exposure) => new(true, exposure, null);
 
-        public bool Success { get; set; }
-        public decimal CurrentExposure { get; set; }
-        public string ErrorMessage { get; set; }
+        public static CreateOrderResult Rejected(decimal exposure, string reason) => new(false, exposure, reason);
     }
 }

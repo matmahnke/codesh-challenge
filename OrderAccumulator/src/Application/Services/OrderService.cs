@@ -1,32 +1,27 @@
 ﻿using Application.Models;
-using Application.Persistence;
 using Domain.Entities;
 using Domain.Interfaces;
 
 namespace Application.Services
 {
-    public class OrderService(IAssetExposureRepository assetExposureRepository, IUnitOfWork unitOfWork) : IOrderService
+    public sealed class OrderService(
+        IAssetExposureRepository exposures,
+        IOrderRepository orders) : IOrderService
     {
         public async Task<CreateOrderResult> ProcessAsync(CreateOrderCommand command, CancellationToken ct)
         {
-            await using (unitOfWork)
-            {
-                await unitOfWork.BeginTransactionAsync(ct);
-                var order = new Order(command.Asset, command.Side, command.Quantity, command.Price);
+            var order = Order.Create(command.Asset, command.Side, command.Quantity, command.Price);
 
-                var exposure = await assetExposureRepository.GetByAssetAsync(order.Asset, ct);
+            // Order.Create já garante que o ativo é suportado; ausência aqui indica seed faltando (erro interno).
+            var exposure = await exposures.GetByAssetAsync(command.Asset, ct)
+                ?? throw new InvalidOperationException($"Exposição do ativo '{command.Asset}' não encontrada.");
 
-                if (exposure == null)
-                    exposure = new AssetExposure(order.Asset);
+            var accepted = exposure.TryApply(order);
+            orders.Add(order);
 
-                exposure.ApplyOrder(order);
-
-                assetExposureRepository.Add(exposure);
-
-                await unitOfWork.CommitAsync(ct);
-
-                return new CreateOrderResult(true, exposure.Exposure, string.Empty);
-            }
+            return accepted
+                ? CreateOrderResult.Accepted(exposure.Exposure)
+                : CreateOrderResult.Rejected(exposure.Exposure, order.RejectionReason!);
         }
     }
 }

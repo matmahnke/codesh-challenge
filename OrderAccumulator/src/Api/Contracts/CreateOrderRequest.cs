@@ -1,12 +1,19 @@
-﻿using Domain.Enums;
+﻿using System.Text.Json.Serialization;
 
 namespace Api.Contracts
 {
-    public class CreateOrderRequest
+    public sealed class CreateOrderRequest
     {
-        public string Ativo { get; set; }
-        public OrderSide Lado { get; set; }
-        public int Quantidade { get; set; }
-        public decimal Preco { get; set; }
+        [JsonPropertyName("ativo")]
+        public string? Ativo { get; init; }
+
+        [JsonPropertyName("lado")]
+        public string? Lado { get; init; }
+
+        [JsonPropertyName("quantidade")]
+        public int? Quantidade { get; init; }
+
+        [JsonPropertyName("preco")]
+        public decimal? Preco { get; init; }
     }
 }

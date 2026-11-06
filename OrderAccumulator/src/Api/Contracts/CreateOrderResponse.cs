@@ -2,22 +2,18 @@
 
 namespace Api.Contracts
 {
-    public class CreateOrderResponse
+    public sealed class CreateOrderResponse(bool sucesso, decimal exposicaoAtual, string? msgErro)
     {
         [JsonPropertyName("sucesso")]
-        public bool Sucesso { get; set; }
+        public bool Sucesso { get; } = sucesso;
 
         [JsonPropertyName("exposicao_atual")]
-        public decimal ExposicaoAtual { get; set; }
+        public decimal ExposicaoAtual { get; } = exposicaoAtual;
 
         [JsonPropertyName("msg_erro")]
-        public string MensagemDeErro { get; set; }
+        public string? MsgErro { get; } = msgErro;
 
-        public CreateOrderResponse(bool sucesso, decimal exposicaoAtual, string mensagemDeErro) // TODO: Rename it to english
-        {
-            Sucesso = sucesso;
-            ExposicaoAtual = exposicaoAtual;
-            MensagemDeErro = mensagemDeErro;
-        }
+        /// <summary>Erro antes do processamento da ordem (validação/infra): exposição não é conhecida.</summary>
+        public static CreateOrderResponse Failure(string msgErro) => new(false, 0m, msgErro);
     }
 }

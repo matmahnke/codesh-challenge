@@ -23,12 +23,36 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("TEXT");
 
-                    b.Property<decimal>("Exposure")
-                        .HasColumnType("TEXT");
+                    b.Property<long>("ExposureCents")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Version")
+                        .IsConcurrencyToken()
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Asset");
 
                     b.ToTable("AssetExposures", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Asset = "PETR4",
+                            ExposureCents = 0L,
+                            Version = 0
+                        },
+                        new
+                        {
+                            Asset = "VALE3",
+                            ExposureCents = 0L,
+                            Version = 0
+                        },
+                        new
+                        {
+                            Asset = "VIIA4",
+                            ExposureCents = 0L,
+                            Version = 0
+                        });
                 });
 
             modelBuilder.Entity("Domain.Entities.Order", b =>
@@ -42,21 +66,43 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("TEXT");
 
-                    b.Property<decimal>("Price")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
+
+                    b.Property<long>("PriceCents")
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("RejectionReason")
+                        .HasMaxLength(300)
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Side")
                         .IsRequired()
+                        .HasMaxLength(4)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(10)
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Asset");
+                    b.HasIndex("Asset", "CreatedAt");
 
                     b.ToTable("Orders", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Entities.Order", b =>
+                {
+                    b.HasOne("Domain.Entities.AssetExposure", null)
+                        .WithMany()
+                        .HasForeignKey("Asset")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

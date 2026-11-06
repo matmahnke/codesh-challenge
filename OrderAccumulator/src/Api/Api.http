@@ -1,6 +1,45 @@
 @Api_HostAddress = http://localhost:5164
 
-GET {{Api_HostAddress}}/weatherforecast/
-Accept: application/json
+### Compra aceita
+POST {{Api_HostAddress}}/orders
+Content-Type: application/json
 
-###
+{
+  "ativo": "PETR4",
+  "lado": "C",
+  "quantidade": 584,
+  "preco": 54.87
+}
+
+### Venda aceita
+POST {{Api_HostAddress}}/orders
+Content-Type: application/json
+
+{
+  "ativo": "PETR4",
+  "lado": "V",
+  "quantidade": 100,
+  "preco": 54.87
+}
+
+### Rejeitada por limite
+POST {{Api_HostAddress}}/orders
+Content-Type: application/json
+
+{
+  "ativo": "VALE3",
+  "lado": "C",
+  "quantidade": 99999,
+  "preco": 999.99
+}
+
+### Payload inválido
+POST {{Api_HostAddress}}/orders
+Content-Type: application/json
+
+{
+  "ativo": "XPTO3",
+  "lado": "X",
+  "quantidade": 100000,
+  "preco": 10.001
+}

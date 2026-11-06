@@ -1,6 +1,6 @@
-﻿using Application.Models;
+using Application.Models;
 
-namespace Domain.Interfaces
+namespace Application.Services
 {
     public interface IOrderService
     {

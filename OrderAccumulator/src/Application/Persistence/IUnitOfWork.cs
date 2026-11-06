@@ -1,11 +1,7 @@
 ﻿namespace Application.Persistence
 {
-    public interface IUnitOfWork : IAsyncDisposable
+    public interface IUnitOfWork
     {
-        Task BeginTransactionAsync(CancellationToken ct = default);
-
-        Task<int> SaveChangesAsync(CancellationToken ct = default);
-
-        Task CommitAsync(CancellationToken ct = default);
+        Task<ITransaction> BeginTransactionAsync(CancellationToken ct = default);
     }
 }

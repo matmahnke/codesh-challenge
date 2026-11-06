@@ -1,30 +1,49 @@
-﻿namespace Domain.Entities
+﻿using System.Globalization;
+using Domain.Exceptions;
+
+namespace Domain.Entities
 {
     public sealed class AssetExposure
     {
-        public string Asset { get; set; }
-        public decimal Exposure { get; set; }
+        public const long LimitCents = 1_000_000_00;
 
-        private const decimal Limit = 1_000_000;
+        public string Asset { get; private set; } = null!;
+        public long ExposureCents { get; private set; }
 
-        public AssetExposure(string asset)
+        public int Version { get; private set; }
+
+        public decimal Exposure => ExposureCents / 100m;
+
+        private AssetExposure() { }
+
+        public AssetExposure(string asset, long exposureCents = 0)
         {
             Asset = asset;
+            ExposureCents = exposureCents;
         }
 
-        public void ApplyOrder(Order order)
+        public bool TryApply(Order order)
         {
             if (order.Asset != Asset)
-                throw new ArgumentException("Invalid Asset");
+                throw new DomainException($"Ordem do ativo '{order.Asset}' não pode ser aplicada à exposição de '{Asset}'.");
 
-            var diff = order.Side == Enums.OrderSide.C ? order.Amount : -order.Amount;
+            var newExposure = ExposureCents + order.SignedNotionalCents;
 
-            var newExposure = Exposure + diff;
+            if (Math.Abs(newExposure) > LimitCents)
+            {
+                order.Reject(
+                    $"Ordem rejeitada: a exposição de {Asset} iria para {FormatCents(newExposure)}, " +
+                    $"ultrapassando o limite de {FormatCents(LimitCents)}.");
+                return false;
+            }
 
-            if (Math.Abs(newExposure) > Limit)
-                throw new Exception("Exposure limit Exceeded"); // TODO: Turn it into a new custom exception
-
-            Exposure = newExposure;
+            ExposureCents = newExposure;
+            Version++;
+            order.Accept();
+            return true;
         }
+
+        private static string FormatCents(long cents) =>
+            (cents / 100m).ToString("N2", CultureInfo.GetCultureInfo("pt-BR"));
     }
 }

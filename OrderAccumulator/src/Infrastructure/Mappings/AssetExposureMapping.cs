@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Domain;
+using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -16,8 +17,16 @@ namespace Infrastructure.Mappings
                 .HasMaxLength(10)
                 .IsRequired();
 
-            builder.Property(x => x.Exposure)
+            builder.Property(x => x.ExposureCents)
                 .IsRequired();
+
+            builder.Property(x => x.Version)
+                .IsConcurrencyToken()
+                .IsRequired();
+
+            builder.Ignore(x => x.Exposure);
+
+            builder.HasData(Assets.Supported.Select(asset => new AssetExposure(asset)));
         }
     }
 }

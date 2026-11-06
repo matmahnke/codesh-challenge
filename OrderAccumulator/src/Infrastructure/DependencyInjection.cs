@@ -16,6 +16,7 @@ namespace Infrastructure
             services.AddDbContext<OrderAccumulatorDbContext>(options => options.UseSqlite(connectionString));
 
             services.AddScoped<IAssetExposureRepository, AssetExposureRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork.UnitOfWork>();
 
             return services;
